@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'img/default.png';
     }
 
+
+
     // --- FUNCIONES DE RENDERIZADO ---
     function renderCategorias(categorias) {
         pageContent.innerHTML = `<h3 class="page-title">Categorías</h3><div id="categorias-grid"></div>`;
@@ -272,6 +274,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function showCategoriasView() {
+        
+        
         currentCategory = null;
         searchInput.value = '';
         const useAvailabilityFilter = availabilityCheckbox.checked;
