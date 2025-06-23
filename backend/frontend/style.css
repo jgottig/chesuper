@@ -118,12 +118,40 @@ body {
 
 /* Lista de Productos */
 #productos-list { display: flex; flex-direction: column; gap: 1px; background-color: #e0dccc; border: 1px solid #e0dccc; border-radius: 12px; overflow: hidden; }
-.product-item { display: flex; align-items: center; background-color: #fff; padding: 1rem; }
-.product-item img { width: 60px; height: 60px; object-fit: contain; margin-right: 1rem; border-radius: 4px; background-color: #f7f3e8; }
-.product-info { flex-grow: 1; }
+.product-item {
+    display: flex;
+    align-items: center; /* ¡CLAVE! Alinea verticalmente todo el contenido del item */
+    background-color: #fff;
+    padding: 1rem;
+    min-height: 90px; /* Asegura una altura mínima para la alineación */
+}
+
+.product-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-right: 1.5rem; /* Un poco más de espacio */
+    border-radius: 4px;
+    background-color: #f7f3e8;
+    flex-shrink: 0; /* Evita que la imagen se achique */
+}
+
+.product-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column; /* Apila el título/logos y la marca */
+    justify-content: center; /* Centra el contenido verticalmente */
+    gap: 0.25rem;
+}
+
 .product-info h4 { font-size: 1rem; margin: 0; }
 .product-info p { font-size: 0.85rem; color: #606770; margin-top: 0.25rem; }
-.product-controls { display: flex; align-items: center; gap: 1rem; }
+.product-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 1rem; /* Espacio para separarlo de la info */
+}
 .quantity-control-btn { background-color: #e9e5da; border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 1.5rem; cursor: pointer; line-height: 1; color: #1c1e21; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; }
 .quantity-control-btn:hover { background-color: #dcd6c5; }
 .quantity-display { font-size: 1.2rem; font-weight: 500; min-width: 20px; text-align: center; }
@@ -336,4 +364,38 @@ body {
     color: white;
     transform: scale(1.1);
     border-color: #1877f2;
+}
+
+/* --- Estilos para los logos de disponibilidad en la lista de productos --- */
+.product-availability {
+    display: inline-flex;
+    gap: 0.25rem; /* Menos espacio entre logos */
+    align-items: center;
+    vertical-align: middle; /* Mejora la alineación con el texto */
+}
+
+.product-availability-logo {
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: contain;
+    border-radius: 1px;
+    border: 0px solid #eee;
+    padding: 0px;
+    background-color: #fff;
+}
+
+.product-title-container {
+    display: flex;
+    align-items: center; /* Alinea el texto y los logos */
+    gap: 0.5rem;
+}
+.product-info h4 {
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.4;
+}
+.product-info p { /* La marca del producto */
+    font-size: 0.85rem;
+    color: #606770;
+    margin: 0; /* Reseteamos el margen superior */
 }
