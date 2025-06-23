@@ -65,9 +65,28 @@ document.addEventListener('DOMContentLoaded', () => {
             item.className = 'product-item';
             const itemInCart = carrito.find(c => c.ean === p.ean);
             const quantity = itemInCart ? itemInCart.quantity : 0;
+
+            // Generamos los logos de disponibilidad
+            let availabilityHtml = '';
+            if (p.banderas_disponibles && p.banderas_disponibles.length > 0) {
+                availabilityHtml = '<div class="product-availability">';
+                p.banderas_disponibles.forEach(bandera => {
+                    const logoUrl = getLogoForSupermercado(bandera);
+                    availabilityHtml += `<img src="${logoUrl}" alt="${bandera}" class="product-availability-logo" title="${bandera}">`;
+                });
+                availabilityHtml += '</div>';
+            }
+
+            // --- Estructura HTML Simplificada y Corregida ---
             item.innerHTML = `
                 <img src="${p.imagen_url}" alt="${p.nombre}" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='">
-                <div class="product-info"><h4>${p.nombre}</h4><p>${p.marca}</p></div>
+                <div class="product-info">
+                    <div class="product-title-container">
+                        <h4>${p.nombre}</h4>
+                        ${availabilityHtml}
+                    </div>
+                    <p>${p.marca}</p>
+                </div>
                 <div class="product-controls" data-ean="${p.ean}" data-nombre="${p.nombre}" data-marca="${p.marca}">
                     <button class="quantity-control-btn minus" ${quantity === 0 ? 'style="visibility: hidden;"' : ''}>-</button>
                     <span class="quantity-display" ${quantity === 0 ? 'style="visibility: hidden;"' : ''}>${quantity}</span>
