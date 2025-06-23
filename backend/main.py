@@ -1,5 +1,7 @@
 # backend/main.py (Versión Final Completa y Verificada)
 
+# backend/main.py (Versión Final con Lista de Banderas por Producto)
+
 import pandas as pd
 import math
 from fastapi import FastAPI, HTTPException
@@ -8,15 +10,11 @@ from pydantic import BaseModel
 from typing import List
 
 # --- INICIALIZACIÓN Y CARGA DE DATOS ---
-app = FastAPI(
-    title="API de Che Súper!",
-    description="El cerebro que alimenta nuestro ecommerce de comparación."
-)
+app = FastAPI(title="API de Che Súper!")
 database = {"productos_df": None, "precios_df": None}
 
 @app.on_event("startup")
 def load_data():
-    """Carga los datos de los archivos Excel al iniciar el servidor."""
     try:
         print("Cargando base de datos de productos...")
         productos_df = pd.read_excel("base_de_productos_rosario.xlsx")
@@ -32,16 +30,10 @@ def load_data():
         
         print("¡Bases de datos cargadas con éxito!")
     except FileNotFoundError as e:
-        print(f"¡ERROR CRÍTICO! No se encontró el archivo: {e.filename}. El servidor fallará.")
+        print(f"¡ERROR CRÍTICO! No se encontró el archivo: {e.filename}.")
 
 # --- MIDDLEWARE ---
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 # --- MODELOS DE DATOS ---
 class CartItem(BaseModel):
@@ -58,9 +50,9 @@ def check_db_loaded():
         raise HTTPException(status_code=503, detail="Los datos del servidor no están listos.")
 
 # --- ENDPOINTS ---
-
 @app.get("/api/categorias", summary="Obtiene la lista de categorías únicas")
 def get_categorias():
+    # ... (Sin cambios) ...
     check_db_loaded()
     categorias = database["productos_df"]['Categoria'].dropna().unique().tolist()
     if 'Otros' in categorias:
@@ -68,34 +60,41 @@ def get_categorias():
         return sorted(categorias) + ['Otros']
     return sorted(categorias)
 
-@app.get("/api/productos", summary="Obtiene una lista paginada de productos")
-def get_productos(
-    q: str = None, categoria: str = None, min_supermercados: int = 1, page: int = 1, limit: int = 24
-):
+# --- ¡ENDPOINT MODIFICADO! ---
+@app.get("/api/productos", summary="Obtiene una lista paginada de productos con sus banderas")
+def get_productos(q: str = None, categoria: str = None, min_supermercados: int = 1, page: int = 1, limit: int = 24):
     check_db_loaded()
     productos_df = database["productos_df"].copy()
     precios_df = database["precios_df"].copy()
+
+    # Pre-calculamos en qué banderas está cada EAN
+    banderas_por_ean = precios_df.groupby('ean')['bandera'].unique().apply(list).reset_index()
+    banderas_por_ean.rename(columns={'bandera': 'banderas_disponibles'}, inplace=True)
+
+    # Unimos esta información con nuestro dataframe de productos
+    productos_con_banderas_df = pd.merge(productos_df, banderas_por_ean, on='ean', how='left')
+    productos_con_banderas_df['banderas_disponibles'] = productos_con_banderas_df['banderas_disponibles'].apply(lambda d: d if isinstance(d, list) else [])
+
     if min_supermercados > 1:
-        conteo_banderas_por_ean = precios_df.groupby('ean')['bandera'].nunique()
-        eans_filtrados = conteo_banderas_por_ean[conteo_banderas_por_ean >= min_supermercados].index.tolist()
-        productos_df = productos_df[productos_df['ean'].isin(eans_filtrados)]
+        productos_con_banderas_df = productos_con_banderas_df[productos_con_banderas_df['banderas_disponibles'].apply(len) >= min_supermercados]
     
-    total_productos_disponibles = len(productos_df)
+    df_final = productos_con_banderas_df
+    total_productos_disponibles = len(df_final)
 
     if categoria:
-        productos_df = productos_df[productos_df['Categoria'].str.lower() == categoria.lower()]
-        total_productos_disponibles = len(productos_df)
+        df_final = df_final[df_final['Categoria'].str.lower() == categoria.lower()]
+        total_productos_disponibles = len(df_final)
     
     if q:
         q_lower = q.lower()
-        df_filtrado_por_busqueda = productos_df[productos_df.apply(lambda row: q_lower in str(row['nombre']).lower() or q_lower in str(row['marca']).lower(), axis=1)]
+        df_filtrado_por_busqueda = df_final[df_final.apply(lambda row: q_lower in str(row['nombre']).lower() or q_lower in str(row['marca']).lower(), axis=1)]
         total_productos_disponibles = len(df_filtrado_por_busqueda)
-        productos_df = df_filtrado_por_busqueda
+        df_final = df_filtrado_por_busqueda
     
     total_paginas = math.ceil(total_productos_disponibles / limit)
     start_index = (page - 1) * limit
     end_index = start_index + limit
-    paginated_products = productos_df.iloc[start_index:end_index]
+    paginated_products = df_final.iloc[start_index:end_index]
     
     return {
         "productos": paginated_products.to_dict('records'),
