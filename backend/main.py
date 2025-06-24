@@ -50,6 +50,10 @@ def check_db_loaded():
         raise HTTPException(status_code=503, detail="Los datos del servidor no están listos.")
 
 # --- ENDPOINTS ---
+@app.get("/", summary="Ruta raíz para chequear API")
+def root():
+    return {"mensaje": "API Che Súper funcionando correctamente."}
+
 @app.get("/api/categorias", summary="Obtiene la lista de categorías únicas")
 def get_categorias():
     # ... (Sin cambios) ...
