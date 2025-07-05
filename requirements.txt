@@ -1,0 +1,25 @@
+# Web framework and API
+fastapi
+uvicorn
+pydantic
+
+# Database
+psycopg2-binary
+sqlalchemy
+python-dotenv
+
+# Data processing and Excel
+pandas
+openpyxl
+
+# HTTP requests and networking
+requests
+
+# Logging and utilities
+python-dateutil
+
+# Text processing
+unicodedata2
+
+# Type hints (for older Python versions)
+typing-extensions

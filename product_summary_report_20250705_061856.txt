@@ -1,0 +1,38 @@
+
+PRODUCT DATABASE SUMMARY REPORT
+Generated: 2025-07-05 06:19:01
+==================================================
+
+OVERVIEW:
+- Total Products: 19,785
+- Unique Brands: 2,795
+- Average Completeness: 52.4%
+- Complete Products (≥80%): 12,967
+- Incomplete Products (<50%): 6,818
+
+CATEGORIES:
+- Almacén: 7,809 (39.5%)
+- Otros: 6,192 (31.3%)
+- Bebidas: 2,241 (11.3%)
+- Lácteos y Frescos: 790 (4.0%)
+- Limpieza: 681 (3.4%)
+- Snacks y Golosinas: 596 (3.0%)
+- Higiene y Cuidado Personal: 541 (2.7%)
+- Electrodomésticos: 444 (2.2%)
+- Panificados: 391 (2.0%)
+- Carnes y Pescados: 49 (0.2%)
+- Congelados: 29 (0.1%)
+- Frutas y Verduras: 21 (0.1%)
+- Almac��n: 1 (0.0%)
+
+TOP BRANDS:
+- S/D: 905 (4.6%)
+- Sin marca: 644 (3.3%)
+- CARREFOUR: 542 (2.7%)
+- SIN MARCA: 349 (1.8%)
+- sin marca: 313 (1.6%)
+- GENERICO: 296 (1.5%)
+- CARREFOUR CLASSIC: 261 (1.3%)
+- BULNEZ: 172 (0.9%)
+- CARREFOUR HOME: 125 (0.6%)
+- DIA: 124 (0.6%)

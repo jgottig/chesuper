@@ -1,0 +1,27 @@
+
+SEARCH EFFECTIVENESS REPORT
+Generated: 365 total searches
+==================================================
+
+OVERVIEW:
+- Terms Tried: 365
+- Total Searches: 365
+- Products Found: 13,143
+- Pages Searched: 768
+- Average Effectiveness: 9.426 products/page
+
+EFFECTIVENESS RANGE:
+- Maximum: 47.344 products/page
+- Minimum: 0.000 products/page
+
+TOP PERFORMING SEARCH TERMS:
+ 1. 'vino': 47.344 products/page
+ 2. 'yogur': 47.000 products/page
+ 3. 'snack': 47.000 products/page
+ 4. 'gomita': 44.000 products/page
+ 5. 'dove': 43.667 products/page
+ 6. 'esponja': 43.600 products/page
+ 7. 'papel': 43.000 products/page
+ 8. 'harina': 43.000 products/page
+ 9. 'limpiador': 43.000 products/page
+10. 'botella': 42.833 products/page
