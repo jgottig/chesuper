@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- ESTADO DE LA APLICACIÓN ---
-    const API_URL =  'http://127.0.0.1:8000' ;// 'http://127.0.0.1:8000';'https://chesuper.onrender.com'
+    const API_URL =  'https://chesuper.onrender.com' ;// 'http://127.0.0.1:8000';'https://chesuper.onrender.com'
     let carrito = [];
     let currentCategory = null;
     let lastComparisonResults = null;
