@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- ESTADO DE LA APLICACIÓN ---
-    const API_URL =  'https://chesuper.onrender.com' ;// 'http://127.0.0.1:8000';'https://chesuper.onrender.com'
+    const API_URL =  'http://127.0.0.1:8000' ;// 'http://127.0.0.1:8000';'https://chesuper.onrender.com'
     let carrito = [];
     let currentCategory = null;
     let lastComparisonResults = null;
@@ -583,18 +583,42 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = '';
     });
 
-    // --- EVENT LISTENERS MÓVILES ---
+    // --- EVENT LISTENERS MÓVILES MEJORADOS ---
+    
+    // Agregar touch events específicos para botones de cantidad
+    pageContent.addEventListener('touchend', (e) => {
+        const quantityBtn = e.target.closest('.quantity-control-btn');
+        const categoryCard = e.target.closest('.category-card');
+        
+        if (quantityBtn) {
+            e.preventDefault();
+            e.stopPropagation();
+            const controls = quantityBtn.closest('.product-controls');
+            const { ean, nombre, marca } = controls.dataset;
+            const change = quantityBtn.classList.contains('plus') ? 1 : -1;
+            updateProductQuantity(ean, nombre, marca, change);
+        }
+        
+        if (categoryCard) {
+            e.preventDefault();
+            showProductosView(categoryCard.dataset.categoria);
+        }
+    }, { passive: false });
+
     if (cartFloatingButton) {
-        // Agregar soporte para touch events
+        // Mejorar touch handling para móvil
         cartFloatingButton.addEventListener('click', () => {
             if (isMobileView()) {
                 openMobileCart();
             }
         });
         
-        // Prevenir comportamientos no deseados en móvil
-        cartFloatingButton.addEventListener('touchstart', (e) => {
+        // Agregar touchend para mejor respuesta en móvil
+        cartFloatingButton.addEventListener('touchend', (e) => {
             e.preventDefault();
+            if (isMobileView()) {
+                openMobileCart();
+            }
         }, { passive: false });
     }
 
