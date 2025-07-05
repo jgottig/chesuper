@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- ESTADO DE LA APLICACIÓN ---
-    const API_URL =  'https://chesuper.onrender.com' ;// 'http://127.0.0.1:8000';'https://chesuper.onrender.com'
+    const API_URL =  'http://127.0.0.1:8000' ;// 'http://127.0.0.1:8000';'https://chesuper.onrender.com'
     let carrito = [];
     let currentCategory = null;
     let lastComparisonResults = null;
@@ -418,6 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         if (quantityBtn) {
+            e.preventDefault(); // Prevenir comportamientos no deseados en móvil
             const controls = quantityBtn.closest('.product-controls');
             const { ean, nombre, marca } = controls.dataset;
             const change = quantityBtn.classList.contains('plus') ? 1 : -1;
@@ -506,7 +507,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    compareButton.addEventListener('click', async () => {
+    compareButton.addEventListener('click', async (e) => {
+        e.preventDefault(); // Prevenir comportamientos no deseados en móvil
         const promoCheckbox = document.getElementById('promo-results-checkbox');
         const usePromos = promoCheckbox ? promoCheckbox.checked : false;
         const body = { items: carrito.map(({ ean, quantity }) => ({ ean, quantity })), use_promos: usePromos };
@@ -583,11 +585,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- EVENT LISTENERS MÓVILES ---
     if (cartFloatingButton) {
+        // Agregar soporte para touch events
         cartFloatingButton.addEventListener('click', () => {
             if (isMobileView()) {
                 openMobileCart();
             }
         });
+        
+        // Prevenir comportamientos no deseados en móvil
+        cartFloatingButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+        }, { passive: false });
     }
 
     if (cartCloseButton) {
