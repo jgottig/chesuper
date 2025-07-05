@@ -51,8 +51,10 @@ def root():
 def get_categorias():
     try:
         categorias = db_service.get_categorias()
+        print(f"✅ Categorías obtenidas exitosamente: {len(categorias)} categorías")
         return categorias
     except Exception as e:
+        print(f"❌ Error obteniendo categorías: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error obteniendo categorías: {str(e)}")
 
 @app.get("/api/productos", summary="Obtiene una lista paginada de productos con sus banderas")
@@ -66,8 +68,10 @@ def get_productos(q: str = None, categoria: str = None, min_supermercados: int =
             page=page, 
             limit=limit
         )
+        print(f"✅ Productos obtenidos exitosamente: {result['total_productos_disponibles']} productos disponibles, página {page}")
         return result
     except Exception as e:
+        print(f"❌ Error obteniendo productos: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error obteniendo productos: {str(e)}")
 
 @app.post("/api/comparar", summary="Compara un carrito y devuelve los totales y detalles de precios")
