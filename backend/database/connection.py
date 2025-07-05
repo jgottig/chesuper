@@ -27,12 +27,19 @@ else:
 
 print(f"🔗 Intentando conectar a: {DB_HOST if DB_HOST else 'URL completa'}")
 
-# Crear engine de SQLAlchemy
+# Crear engine de SQLAlchemy con configuración optimizada para producción
 engine = create_engine(
     connection_string,
-    pool_pre_ping=True,  # Verificar conexiones antes de usarlas
-    pool_recycle=300,    # Reciclar conexiones cada 5 minutos
-    echo=False           # Cambiar a True para debug SQL
+    pool_pre_ping=True,      # Verificar conexiones antes de usarlas
+    pool_recycle=300,        # Reciclar conexiones cada 5 minutos
+    pool_size=5,             # Número de conexiones en el pool
+    max_overflow=10,         # Conexiones adicionales permitidas
+    pool_timeout=30,         # Timeout para obtener conexión del pool
+    connect_args={
+        "connect_timeout": 10,    # Timeout de conexión inicial
+        "application_name": "che-super-api"  # Identificar la aplicación
+    },
+    echo=False               # Cambiar a True para debug SQL
 )
 
 # Crear sessionmaker
