@@ -960,19 +960,23 @@ input:focus, button:focus {
 
 /* Móviles y tablets pequeñas */
 @media (max-width: 768px) {
-    /* Evitar zoom en botones */
+    /* Configuración base para móvil - SIN bloquear touch */
     * {
-        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+    
+    /* Solo evitar selección en elementos específicos que NO necesitan ser clickeables */
+    .product-info h4, .product-info p, .detalle-item-nombre, .page-title, .main-header h2 {
         -webkit-user-select: none;
         -khtml-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        touch-action: manipulation;
     }
     
     /* Permitir selección de texto donde sea necesario */
-    input, textarea, .product-info h4, .product-info p, .detalle-item-nombre {
+    input, textarea {
         -webkit-user-select: text;
         -khtml-user-select: text;
         -moz-user-select: text;
