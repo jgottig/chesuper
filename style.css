@@ -92,6 +92,7 @@ body {
 
 /* --- OVERLAY PARA MÓVIL --- */
 .cart-overlay {
+    pointer-events: none;
     display: none;
     position: fixed;
     top: 0;
