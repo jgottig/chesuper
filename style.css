@@ -601,7 +601,7 @@ body {
 .resultado-card-logo { width: 110px; height: 110px; object-fit: contain; margin: 0 auto 1rem auto; display: block; }
 .resultado-total { font-size: 1.8rem; font-weight: 700; color: #1c1e21; }
 .resultado-items-count { font-size: 0.85rem; color: #606770; margin-top: 0.5rem; }
-.detalle-productos { position: absolute; top: calc(100% + 10px); left: 0; right: 0; z-index: 10; background-color: #fff; border: 1px solid #e0dccc; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); text-align: left; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity 0.2s ease-out, transform 0.2s ease-out; }
+.detalle-productos { position: absolute; top: calc(100% + 10px); left: 0; right: 0; z-index: 10; background-color: #fff; border: 1px solid #e0dccc; border-radius: 12px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); text-align: left; opacity: 0; transform: translateY(10px); pointer-events: auto; transition: opacity 0.2s ease-out, transform 0.2s ease-out; }
 .detalle-productos.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .detalle-item { display: flex; justify-content: space-between; padding: 0.8rem 1.5rem; font-size: 0.9rem; border-bottom: 1px solid #e9e5da; }
 .detalle-item:last-child { border-bottom: none; }
