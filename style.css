@@ -92,7 +92,7 @@ body {
 
 /* --- OVERLAY PARA MÓVIL --- */
 .cart-overlay {
-    pointer-events: none;
+    pointer-events: none; 
     display: none;
     position: fixed;
     top: 0;
@@ -1318,5 +1318,11 @@ input:focus, button:focus {
         width: 20px;
         height: 20px;
         font-size: 0.7rem;
+    }
+    html, body {
+      pointer-events: auto !important;
+    }
+    .overlay {
+      pointer-events: none !important;
     }
 }
