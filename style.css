@@ -60,7 +60,7 @@ body {
     z-index: 1000;
     transition: all 0.3s ease;
     /* Propiedades para touch móvil */
-    -webkit-touch-callout: none;
+    /* -webkit-touch-callout: none; */
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
