@@ -247,11 +247,11 @@ body {
     position: relative;
     overflow: hidden;
     /* Propiedades para touch móvil */
-    -webkit-touch-callout: none;
+    /*-webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;
+    user-select: none; */
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
 }
@@ -364,11 +364,11 @@ body {
     position: relative;
     overflow: hidden;
     /* Propiedades para touch móvil */
-    -webkit-touch-callout: none;
+    /*-webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;
+    user-select: none;*/
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
 }
