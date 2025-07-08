@@ -67,7 +67,50 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function appendProductos(productos) {
         const list = document.getElementById('productos-list');
-        productos.forEach(p => {
+        
+        // Función para obtener el precio más barato de un producto
+        function obtenerPrecioMinimo(producto) {
+            let precioMinimo = Infinity;
+            
+            // Verificar diferentes campos donde puede estar el precio
+            if (producto.precio_minimo && producto.precio_minimo > 0) {
+                precioMinimo = Math.min(precioMinimo, producto.precio_minimo);
+            }
+            
+            // Si tiene precios por supermercado, buscar el más barato
+            if (producto.precios && Array.isArray(producto.precios)) {
+                producto.precios.forEach(precio => {
+                    if (precio.precio_lista && precio.precio_lista > 0) {
+                        precioMinimo = Math.min(precioMinimo, precio.precio_lista);
+                    }
+                    if (precio.precio_promo_a && precio.precio_promo_a > 0) {
+                        precioMinimo = Math.min(precioMinimo, precio.precio_promo_a);
+                    }
+                });
+            }
+            
+            return precioMinimo === Infinity ? null : precioMinimo;
+        }
+        
+        // Ordenar productos por precio más barato (si tienen precios disponibles)
+        const productosOrdenados = productos.sort((a, b) => {
+            const precioA = obtenerPrecioMinimo(a);
+            const precioB = obtenerPrecioMinimo(b);
+            
+            // Si ambos tienen precio, ordenar por precio
+            if (precioA !== null && precioB !== null) {
+                return precioA - precioB;
+            }
+            
+            // Si solo uno tiene precio, ese va primero
+            if (precioA !== null) return -1;
+            if (precioB !== null) return 1;
+            
+            // Si ninguno tiene precio, mantener orden alfabético
+            return a.nombre.localeCompare(b.nombre);
+        });
+        
+        productosOrdenados.forEach(p => {
             const item = document.createElement('div');
             item.className = 'product-item';
             const itemInCart = carrito.find(c => c.ean === p.ean);
@@ -176,6 +219,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function isMobileView() {
         return window.innerWidth <= 768;
+    }
+
+    // --- FUNCIONES DE LOADING OVERLAY ---
+    function showLoadingOverlay(message = "Comparando precios...") {
+        // Crear overlay si no existe
+        let overlay = document.getElementById('loading-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'loading-overlay';
+            overlay.className = 'loading-overlay';
+            document.body.appendChild(overlay);
+        }
+        
+        overlay.innerHTML = `
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">${message}</div>
+            </div>
+        `;
+        
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideLoadingOverlay() {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
     }
 
     // Función para obtener la URL de formas de pago según el supermercado
@@ -513,17 +586,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const usePromos = promoCheckbox ? promoCheckbox.checked : false;
         const body = { items: carrito.map(({ ean, quantity }) => ({ ean, quantity })), use_promos: usePromos };
         
+        // Si estamos en móvil, cerrar el carrito automáticamente
+        if (isMobileView()) {
+            closeMobileCart();
+            // Pequeña pausa para que se vea la transición
+            await new Promise(resolve => setTimeout(resolve, 300));
+        }
+        
+        // Mostrar loading overlay
+        showLoadingOverlay("Comparando precios en supermercados...");
+        
         compareButton.textContent = 'Calculando...';
         compareButton.disabled = true;
+        
         try {
+            // Cambiar mensaje de loading
+            setTimeout(() => {
+                const loadingText = document.querySelector('.loading-text');
+                if (loadingText) loadingText.textContent = "Buscando mejores ofertas...";
+            }, 1000);
+            
+            setTimeout(() => {
+                const loadingText = document.querySelector('.loading-text');
+                if (loadingText) loadingText.textContent = "Casi listo...";
+            }, 2000);
+            
             const [compareResponse, optimizeResponse] = await Promise.all([
                 fetch(`${API_URL}/api/comparar`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }),
                 fetch(`${API_URL}/api/optimizar`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
             ]);
             const compareData = await compareResponse.json();
             const optimizeData = await optimizeResponse.json();
+            
+            // Ocultar loading overlay
+            hideLoadingOverlay();
+            
             renderResultados(compareData, optimizeData);
         } catch (error) {
+            hideLoadingOverlay();
             pageContent.innerHTML = '<h2>Error al conectar con el servidor.</h2>';
             console.error("Error al comparar:", error);
         } finally {
